@@ -1,0 +1,15 @@
+[Unit]
+Description=Video Service
+After=network.target
+
+[Service]
+User=zhong
+ExecStart=/opt/video.sh
+WorkingDirectory=/home/zhong
+Restart=on-failure
+RestartSec=5s
+Environment="ROS_LOG_DIR=/var/log/ros2"
+SyslogIdentifier=video_service
+
+[Install]
+WantedBy=multi-user.target

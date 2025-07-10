@@ -1,0 +1,15 @@
+[Unit]
+Description=Ble Service
+After=network.target
+
+[Service]
+User=zhong
+ExecStart=/opt/ble.sh
+WorkingDirectory=/home/zhong
+Restart=on-failure
+RestartSec=5s
+Environment="ROS_LOG_DIR=/var/log/ros2"
+SyslogIdentifier=ble_service
+
+[Install]
+WantedBy=multi-user.target

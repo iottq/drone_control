@@ -1,0 +1,11 @@
+# action/GeoLand.action
+float64 latitude
+float64 longitude
+float64 altitude
+int32 cmd
+---
+bool success
+string message
+---
+float64 current_distance
+string current_step
