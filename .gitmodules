@@ -10,3 +10,6 @@
 [submodule "src/web_video_server"]
 	path = src/web_video_server
 	url = https://github.com/RobotWebTools/web_video_server.git
+[submodule "src/camera_ros"]
+	path = src/camera_ros
+	url = https://github.com/christianrauch/camera_ros

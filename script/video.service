@@ -1,15 +1,15 @@
 [Unit]
-Description=Ble Service
+Description=Video Service
 After=network.target
 
 [Service]
-User=zhong
-ExecStart=/opt/ble.sh
-WorkingDirectory=/home/zhong
+User=ros2
+ExecStart=/opt/video.sh
+WorkingDirectory=/home/ros2
 Restart=on-failure
 RestartSec=5s
 Environment="ROS_LOG_DIR=/var/log/ros2"
-SyslogIdentifier=ble_service
+SyslogIdentifier=video service
 
 [Install]
 WantedBy=multi-user.target

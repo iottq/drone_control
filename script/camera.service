@@ -1,15 +1,15 @@
 [Unit]
-Description=geoland server Service
+Description=Camera Service
 After=network.target
 
 [Service]
-User=zhong
-ExecStart=/opt/geoland.sh
-WorkingDirectory=/home/zhong
+User=ros2
+ExecStart=/opt/camera.sh
+WorkingDirectory=/home/ros2
 Restart=on-failure
 RestartSec=5s
 Environment="ROS_LOG_DIR=/var/log/ros2"
-SyslogIdentifier=geoland_server_service
+SyslogIdentifier=camera_service
 
 [Install]
 WantedBy=multi-user.target

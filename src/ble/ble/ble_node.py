@@ -25,6 +25,10 @@ BATTERY_CHR_UUID = "00080000-0001-11E1-AC36-0002A5D5C51B"
 STATUS_CHR_UUID = "00800000-0001-11E1-AC36-0002A5D5C51B"
 TASK_CHR_UUID = "01000000-0001-11E1-AC36-0002A5D5C51B"
 
+# add advertisement on peripheral.py  def _create_advertisement(self)
+# int_array = [int(x, 16) for x in self.address.split(':')]
+# hex_array = [0x01,0x88,0x80,0x00] 
+# self.advert.manufacturer_data(0x8001,hex_array + int_array)
 
 
 def on_connect(ble_device: device.Device):

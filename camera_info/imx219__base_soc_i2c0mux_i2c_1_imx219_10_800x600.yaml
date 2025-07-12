@@ -1,0 +1,26 @@
+image_width: 800
+image_height: 600
+camera_name: imx219__base_soc_i2c0mux_i2c_1_imx219_10_800x600
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [635.52218,   0.     , 415.97441,
+           0.     , 635.0911 , 309.07681,
+           0.     ,   0.     ,   1.     ]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [0.190732, -0.333250, 0.001196, 0.001036, 0.000000]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1., 0., 0.,
+         0., 1., 0.,
+         0., 0., 1.]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [650.64247,   0.     , 417.52923,   0.     ,
+           0.     , 652.67466, 309.62456,   0.     ,
+           0.     ,   0.     ,   1.     ,   0.     ]
