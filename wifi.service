@@ -1,0 +1,13 @@
+[Unit]
+Description=rasp Wi-Fi hotspot service
+After=network.target
+
+[Service]
+user=root
+Type=oneshot
+ExecStart=/opt/wifi.sh hotspot
+ExecStop=/opt/wifi.sh stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
