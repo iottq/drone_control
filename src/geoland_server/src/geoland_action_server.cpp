@@ -16,9 +16,6 @@ geoland_server::GeolandActionServer::GeolandActionServer(const rclcpp::NodeOptio
     trajectory_setpoint_publisher_ = this->create_publisher<TrajectorySetpoint>("/fmu/in/trajectory_setpoint", 10);
     vehicle_command_publisher_ = this->create_publisher<VehicleCommand>("/fmu/in/vehicle_command", 10);
     rclcpp::QoS qos_profile = rclcpp::QoS(rclcpp::KeepLast(10)).best_effort();
-    // home_position_sub_ = this->create_subscription<HomePosition>(
-		// 	"/fmu/out/home_position",qos_profile,std::bind(&geoland_server::GeolandActionServer::home_position_callback, this, _1)
-		// );
 
     local_position_sub_ = this->create_subscription<VehicleLocalPosition>(
       "/fmu/out/vehicle_local_position",qos_profile, std::bind(&geoland_server::GeolandActionServer::local_position_callback, this, _1)
@@ -119,13 +116,6 @@ rclcpp_action::GoalResponse geoland_server::GeolandActionServer::handle_goal(
   }
 
   /*  
-      1.设置offboard模式
-      2.解锁
-      3.gpc转ned坐标
-      4.发布trajectory_setpoint
-      5.订阅px4当前位置，检查是否到达位置
-       到达->完成任务
-       否则->继续发布setpoint
 
        cmd: 1 ->  fly to location and return;
             2 ->  fly to location and descend;
@@ -144,10 +134,10 @@ rclcpp_action::GoalResponse geoland_server::GeolandActionServer::handle_goal(
     GeographicLib::LocalCartesian geo_converter;
 
     home_alt_ = current_alt_, home_lat_ = current_lat_, home_lon_ = current_lon_;
-    RCLCPP_INFO(this->get_logger(), "Location init: lat: %f lon: %f", home_lat_, home_lon_);
+    
     geo_converter.Reset(home_lat_,home_lon_,home_alt_);
     geo_converter.Forward(target_latitude_,target_longitude_,target_altitude_, target_x_, target_y_, target_z_);
-    RCLCPP_INFO(this->get_logger(), "Location taget: lat: %f lon: %f", target_latitude_, target_longitude_);
+    
 
     _search_started = false;
     _land_detected = false;
@@ -157,7 +147,7 @@ rclcpp_action::GoalResponse geoland_server::GeolandActionServer::handle_goal(
       switchToState(State::Search);
       geo_converter.Forward(current_lat_,current_lon_,current_z_, target_x_, target_y_, target_z_);
     }
-    RCLCPP_INFO(this->get_logger(), "target ned: x=%f y=%f z=%f", float(target_x_), float(target_y_), float(target_z_));
+    
     this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
     if(arming_state_ == VehicleStatus::ARMING_STATE_DISARMED){
       this->arm();
@@ -238,10 +228,6 @@ rclcpp_action::GoalResponse geoland_server::GeolandActionServer::handle_goal(
                 publish_offboard_control_mode();
                 if (target_lost) {
                   RCLCPP_INFO(this->get_logger(), "Failed! Target lost during %s", stateName(_state).c_str());
-                  // idle_x = current_x_;
-                  // idle_y = current_y_;
-                  // idle_z = current_z_;
-                  // switchToState(State::Idle);
                   break;
                 }
             
@@ -261,7 +247,6 @@ rclcpp_action::GoalResponse geoland_server::GeolandActionServer::handle_goal(
                 publish_offboard_control_mode();
                 if (target_lost) {
                   RCLCPP_INFO(this->get_logger(), "Failed! Target lost during %s", stateName(_state).c_str());
-                  //switchToState(State::Idle);
                 }
             
                 // Descend using velocity setpoints and P velocity controller for XY
@@ -275,7 +260,6 @@ rclcpp_action::GoalResponse geoland_server::GeolandActionServer::handle_goal(
                 
                 //RCLCPP_INFO(this->get_logger(), "Landed: %s", _land_detected ? "true":"false");
                 if (_land_detected) {
-                  //switchToState(State::Finished);
                     this->publish_vehicle_command(VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 3);
                     result->success = true;
                     result->message = "landed";
@@ -507,8 +491,8 @@ void geoland_server::GeolandActionServer::generateSearchWaypoints()
 	// Generate spiral search waypoints
 	// The search waypoints are generated in the NED frame
 	// Parameters for the search pattern
-	double start_x = 0.0;
-	double start_y = 0.0;
+	double start_x = _vehicle_local_position->positionNed().x();
+	double start_y = _vehicle_local_position->positionNed().y();
 	double current_z = _vehicle_local_position->positionNed().z();
 	auto min_z = -1.0;
 

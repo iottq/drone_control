@@ -5,8 +5,8 @@
 
 WIFI_IF="wlan0"
 LAN_IF="eth0"
-HOTSPOT_SSID="MyPiAP"
-HOTSPOT_PSK="MyStrongPassword"
+HOTSPOT_SSID="PX4ROS_AP"
+HOTSPOT_PSK="Password"
 
 MODE=$1
 

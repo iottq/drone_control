@@ -226,7 +226,7 @@ class ble_node(Node):
         #self.get_logger().info(f"ble yaw: {yaw} power: {power} roll: {roll} pitch: {pitch}")
 
     def on_task_write(self, value, options):
-        print(f"task:{value.hex()}")
+        self.get_logger().info(f"task:{value.hex()}")
         obj = json.loads(value.decode('utf-8'))
         goal = GeoLand.Goal()
         goal.latitude = float(obj['lat'])
@@ -234,7 +234,7 @@ class ble_node(Node):
         goal.altitude = float(obj['alt'])
         goal.cmd = int(obj['cmd'])
         self.send_goal(goal)
-        print(obj)
+        self.get_logger().info("send task to action service.")
 
     def update_value(self, characteristic):
          power = round(self.power_voltage_v, 1) * 10
