@@ -19,3 +19,9 @@ Master the integration of ROS2, PX4, and OpenCV to achieve precision landing usi
 Find the sdcard image or archive with fastboot images [here](https://github.com/tesla-android/android-raspberry-pi/releases)
 
 Use the SDCard raw image to flash the Android into SDCard.
+
+
+sudo apt install libgeographic-dev ros-humble-camera-info-manager libboost-all-dev python3-dev
+rosdep install --from-paths src/web_video_server -i
+rosdep install -y --from-paths src/camera_ros --ignore-src --rosdistro $ROS_DISTRO
+pip install bluezero
